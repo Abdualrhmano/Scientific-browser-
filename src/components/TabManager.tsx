@@ -1,60 +1,121 @@
 'use client';
 
-import { useRef } from 'react';
-import { Plus, X } from 'lucide-react';
-import { useBrowserStore } from '../store/useBrowserStore';
-import { useBrowserShallow } from '../store/useBrowserStore';
-import shallow from 'zustand/shallow';
-import { nanoid } from 'nanoid';
+import React, { useRef, useEffect } from 'react';
+import { X, Plus, FileText, Search, Video, MessageSquare, Library, Loader2 } from 'lucide-react';
+import { useBrowserStore } from '@/store/useBrowserStore';
+import type { TabContentData } from '@/types';
 
-export default function TabManager() {
-  const containerRef = useRef<HTMLDivElement | null>(null);
+// -------------------------------------------
+// أيقونة لكل نوع تبويب
+// -------------------------------------------
+const getTabIcon = (contentData: TabContentData) => {
+  switch (contentData.type) {
+    case 'paper_view':
+      return <FileText size={14} />;
+    case 'search_results':
+      return <Search size={14} />;
+    case 'video_player':
+      return <Video size={14} />;
+    case 'ai_assistant':
+      return <MessageSquare size={14} />;
+    case 'library':
+      return <Library size={14} />;
+    case 'blank':
+    default:
+      return null;
+  }
+};
 
-  const { tabs, addTab, closeTab, setActiveTab } = useBrowserStore(
-    (s) => ({ tabs: s.tabs, addTab: s.addTab, closeTab: s.closeTab, setActiveTab: s.setActiveTab }),
-    shallow
-  );
+// -------------------------------------------
+// المكون الرئيسي
+// -------------------------------------------
+const TabManager: React.FC = () => {
+  const {
+    tabs,
+    activeTabId,
+    setActiveTab,
+    closeTab,
+    addTab,
+  } = useBrowserStore();
 
-  const handleAdd = () => {
-    addTab({ title: 'New Tab', url: '', type: 'research', activate: true });
-    setTimeout(() => {
-      containerRef.current?.scrollTo({ left: containerRef.current.scrollWidth, behavior: 'smooth' });
-    }, 50);
+  const tabsContainerRef = useRef<HTMLDivElement>(null);
+
+  // ---- التمرير التلقائي للوصول إلى التبويب النشط ----
+  useEffect(() => {
+    if (!tabsContainerRef.current || !activeTabId) return;
+
+    const container = tabsContainerRef.current;
+    const activeTabElement = container.querySelector(`[data-tab-id="${activeTabId}"]`);
+    if (activeTabElement) {
+      activeTabElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center',
+      });
+    }
+  }, [activeTabId]);
+
+  // ---- إضافة تبويب فارغ جديد ----
+  const handleAddBlankTab = () => {
+    const blankContent: TabContentData = { type: 'blank' };
+    addTab(blankContent, 'New Tab', 'about:blank');
   };
 
   return (
-    <div className="px-4 py-2 border-b border-white/6 bg-oxford/80">
-      <div className="flex items-center gap-3">
-        <div className="flex-1 overflow-x-auto" ref={containerRef}>
-          <div className="flex gap-2 min-w-max">
-            {tabs.map((t) => (
-              <div
-                key={t.id}
-                role="tab"
-                aria-selected={t.active}
-                onClick={() => setActiveTab(t.id)}
-                className={`cursor-pointer select-none px-3 py-2 rounded-md ${t.active ? 'bg-white/8 ring-1 ring-emerald' : 'bg-white/3'} flex items-center gap-2`}
-              >
-                <span className="text-sm font-medium">{t.title}</span>
-                <button
-                  aria-label={`Close ${t.title}`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    closeTab(t.id);
-                  }}
-                  className="p-1 rounded hover:bg-white/6"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
+    <div className="flex items-center h-9 bg-panel-light dark:bg-panel-dark border-b border-border-light dark:border-border-dark">
+      {/* ---- منطقة التبويبات مع تمرير أفقي ---- */}
+      <div
+        ref={tabsContainerRef}
+        className="flex-1 flex items-center gap-0 overflow-x-auto custom-scrollbar scrollbar-hide"
+      >
+        {tabs.tabs.map((tab) => {
+          const isActive = tab.id === activeTabId;
+          const icon = getTabIcon(tab.contentData);
 
-        <button aria-label="New Tab" onClick={handleAdd} className="btn">
-          <Plus className="w-4 h-4" />
-        </button>
+          return (
+            <button
+              key={tab.id}
+              data-tab-id={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`tab flex-shrink-0 max-w-[180px] gap-1.5 ${isActive ? 'active' : ''}`}
+              title={tab.title}
+            >
+              {icon && <span className="flex-shrink-0">{icon}</span>}
+              <span className="truncate text-xs">{tab.title}</span>
+              
+              {/* عرض مؤشر التحميل أو زر الإغلاق */}
+              {tab.isLoading ? (
+                <span className="ml-1 flex-shrink-0 p-0.5">
+                  <Loader2 size={12} className="animate-spin" />
+                </span>
+              ) : (
+                <span
+                  onClick={(e) => {
+                    e.stopPropagation(); // منع تنشيط التبويب عند الإغلاق
+                    closeTab(tab.id);
+                  }}
+                  className="ml-1 flex-shrink-0 rounded-full p-0.5 hover:bg-border-light dark:hover:bg-border-dark transition-colors"
+                  role="button"
+                  aria-label={`إغلاق ${tab.title}`}
+                >
+                  <X size={12} />
+                </span>
+              )}
+            </button>
+          );
+        })}
       </div>
+
+      {/* ---- زر إضافة تبويب جديد ---- */}
+      <button
+        onClick={handleAddBlankTab}
+        className="flex-shrink-0 icon-btn mx-1"
+        aria-label="إضافة تبويب جديد"
+      >
+        <Plus size={16} />
+      </button>
     </div>
   );
-}
+};
+
+export default TabManager;
