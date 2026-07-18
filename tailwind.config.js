@@ -7,7 +7,15 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // لوحة ألوان أكاديمية
+        // الألوان المرتبطة بمتغيرات CSS (ثيم متغير)
+        surface:      'rgb(var(--color-surface) / <alpha-value>)',
+        panel:        'rgb(var(--color-panel) / <alpha-value>)',
+        border:       'rgb(var(--color-border) / <alpha-value>)',
+        'text-primary':   'rgb(var(--color-text-primary) / <alpha-value>)',
+        'text-secondary': 'rgb(var(--color-text-secondary) / <alpha-value>)',
+        'text-muted':     'rgb(var(--color-text-muted) / <alpha-value>)',
+
+        // ألوان ثابتة (غير مرتبطة بالثيم)
         primary: {
           50:  '#eff6ff',
           100: '#dbeafe',
@@ -32,32 +40,6 @@ module.exports = {
           700: '#0369a1',
           800: '#075985',
           900: '#0c4a6e',
-        },
-        surface: {
-          light: '#ffffff',
-          dark:  '#0f172a', // slate-900
-        },
-        panel: {
-          light: '#f8fafc', // slate-50
-          dark:  '#1e293b', // slate-800
-        },
-        border: {
-          light: '#e2e8f0', // slate-200
-          dark:  '#334155', // slate-700
-        },
-        text: {
-          primary: {
-            light: '#0f172a', // slate-900
-            dark:  '#f1f5f9', // slate-100
-          },
-          secondary: {
-            light: '#475569', // slate-600
-            dark:  '#94a3b8', // slate-400
-          },
-          muted: {
-            light: '#94a3b8', // slate-400
-            dark:  '#64748b', // slate-500
-          },
         },
         success: '#10b981',
         warning: '#f59e0b',
