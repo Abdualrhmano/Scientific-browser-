@@ -24,47 +24,43 @@
     --color-text-muted: 100 116 139;
   }
 
-  /* إعدادات أساسية للمتصفح */
   html {
     @apply antialiased;
-    text-rendering: optimizeLegibility;
     scroll-behavior: smooth;
   }
 
   body {
-    @apply bg-surface-light dark:bg-surface-dark text-text-primary-light dark:text-text-primary-dark;
-    @apply font-sans;
+    @apply bg-surface text-text-primary font-sans;
     margin: 0;
     padding: 0;
-    overflow: hidden; /* نمنع التمرير على مستوى الجسم بالكامل - سنمرر المكونات الداخلية فقط */
     height: 100vh;
     width: 100vw;
+    overflow: hidden;
   }
 
-  /* تنسيقات النصوص الطويلة باستخدام prose للقراءة العلمية */
+  /* تنسيقات النصوص الطويلة */
   .prose {
-    @apply max-w-none; /* نترك التحكم بالعرض للمكونات */
+    @apply max-w-none;
   }
 
   .prose h1, .prose h2, .prose h3, .prose h4 {
-    @apply text-text-primary-light dark:text-text-primary-dark font-sans;
+    @apply text-text-primary font-sans;
   }
 
-  .prose p, .prose li, .prose blockquote {
-    @apply text-text-secondary-light dark:text-text-secondary-dark font-serif text-reader;
+  .prose p, .prose li {
+    @apply text-text-secondary font-serif text-reader;
   }
 
   .prose code {
-    @apply font-mono text-primary-600 dark:text-primary-400 bg-panel-light dark:bg-panel-dark px-1 py-0.5 rounded;
+    @apply font-mono text-primary-600 dark:text-primary-400 bg-panel px-1 py-0.5 rounded;
   }
 
   .prose a {
     @apply text-primary-600 dark:text-primary-400 no-underline hover:underline;
   }
 
-  /* اختيار النصوص */
   ::selection {
-    @apply bg-primary-200 dark:bg-primary-800 text-text-primary-light dark:text-text-primary-dark;
+    @apply bg-primary-200 dark:bg-primary-800 text-text-primary;
   }
 }
 
@@ -72,14 +68,10 @@
    مكونات مخصصة قابلة لإعادة الاستخدام
    ============================================ */
 @layer components {
-  /* شريط تمرير نحيف ومخصص (لبيئات القراءة العميقة) */
+  /* شريط تمرير مخصص */
   .custom-scrollbar {
     scrollbar-width: thin;
-    scrollbar-color: theme('colors.border.light') transparent;
-  }
-
-  .dark .custom-scrollbar {
-    scrollbar-color: theme('colors.border.dark') transparent;
+    scrollbar-color: rgb(var(--color-border)) transparent;
   }
 
   .custom-scrollbar::-webkit-scrollbar {
@@ -92,54 +84,46 @@
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-border-light dark:bg-border-dark rounded-full;
-    transition: background 0.2s;
+    @apply bg-border rounded-full;
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    @apply bg-text-muted-light dark:bg-text-muted-dark;
+    @apply bg-text-muted;
   }
 
-  /* لوحة جانبية (تستخدم في DeepSearchPanel, LibraryWorkspace, AIAssistant) */
+  /* لوحة جانبية */
   .panel {
-    @apply bg-panel-light dark:bg-panel-dark border-r border-border-light dark:border-border-dark;
-    @apply shadow-panel dark:shadow-panel-dark;
+    @apply bg-panel border-border shadow-panel dark:shadow-panel-dark;
+    border-inline-end: 1px solid rgb(var(--color-border));
   }
 
-  /* زر أيقونة (Icon Button) */
+  /* زر أيقونة */
   .icon-btn {
-    @apply p-2 rounded-lg text-text-secondary-light dark:text-text-secondary-dark;
-    @apply hover:bg-primary-100 dark:hover:bg-primary-900/30;
-    @apply transition-colors duration-150;
-    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500;
+    @apply p-2 rounded-lg text-text-secondary hover:bg-primary-100 dark:hover:bg-primary-900/30
+           transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500;
   }
 
   .icon-btn.active {
     @apply bg-primary-100 dark:bg-primary-900/50 text-primary-600 dark:text-primary-400;
   }
 
-  /* حقل بحث موحد (في TopNav) */
+  /* حقل بحث */
   .search-bar {
-    @apply w-full px-4 py-2 bg-surface-light dark:bg-surface-dark;
-    @apply border border-border-light dark:border-border-dark rounded-xl;
-    @apply text-text-primary-light dark:text-text-primary-dark;
-    @apply placeholder:text-text-muted-light dark:placeholder:text-text-muted-dark;
-    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500;
-    @apply transition-shadow duration-150;
-    @apply font-mono text-sm; /* لعرض الروابط والمعرفات بوضوح */
+    @apply w-full px-4 py-2 bg-surface border border-border rounded-xl
+           text-text-primary placeholder:text-text-muted
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500
+           transition-shadow duration-150 font-mono text-sm;
   }
 
-  /* تبويب (لسان) في TabManager */
+  /* تبويب */
   .tab {
-    @apply flex items-center gap-2 px-4 py-2 text-sm font-medium;
-    @apply text-text-secondary-light dark:text-text-secondary-dark;
-    @apply bg-transparent border-b-2 border-transparent;
-    @apply transition-colors duration-150;
-    @apply cursor-pointer select-none;
+    @apply flex items-center gap-2 px-4 py-2 text-sm font-medium
+           text-text-secondary bg-transparent border-b-2 border-transparent
+           transition-colors duration-150 cursor-pointer select-none;
   }
 
   .tab:hover {
-    @apply bg-panel-light dark:bg-panel-dark text-text-primary-light dark:text-text-primary-dark;
+    @apply bg-panel text-text-primary;
   }
 
   .tab.active {
@@ -148,13 +132,11 @@
 
   /* كارد بحث */
   .paper-card {
-    @apply p-4 rounded-xl border border-border-light dark:border-border-dark;
-    @apply bg-surface-light dark:bg-surface-dark;
-    @apply hover:shadow-md transition-shadow duration-200;
-    @apply cursor-pointer;
+    @apply p-4 rounded-xl border border-border bg-surface
+           hover:shadow-md transition-shadow duration-200 cursor-pointer;
   }
 
-  /* شارة (Badge) للتصنيفات (Open Access, Impact Factor, إلخ) */
+  /* شارات */
   .badge {
     @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium;
   }
@@ -173,19 +155,18 @@
 }
 
 /* ============================================
-   تنسيقات مساعدة (Utilities)
+   تنسيقات مساعدة
    ============================================ */
 @layer utilities {
-  /* إخفاء شريط التمرير مع بقاء التمرير يعمل */
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
 
-  /* نص مقطوع مع علامة حذف */
   .truncate-lines-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -199,4 +180,4 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-}
+     }
