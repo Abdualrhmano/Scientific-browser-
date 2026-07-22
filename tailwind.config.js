@@ -1,3 +1,5 @@
+const plugin = require('tailwindcss/plugin');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: 'class',
@@ -7,15 +9,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // الألوان المرتبطة بمتغيرات CSS (ثيم متغير)
-        surface:      'rgb(var(--color-surface) / <alpha-value>)',
-        panel:        'rgb(var(--color-panel) / <alpha-value>)',
-        border:       'rgb(var(--color-border) / <alpha-value>)',
+        surface: 'rgb(var(--color-surface) / <alpha-value>)',
+        panel:   'rgb(var(--color-panel) / <alpha-value>)',
+        border:  'rgb(var(--color-border) / <alpha-value>)',
         'text-primary':   'rgb(var(--color-text-primary) / <alpha-value>)',
         'text-secondary': 'rgb(var(--color-text-secondary) / <alpha-value>)',
         'text-muted':     'rgb(var(--color-text-muted) / <alpha-value>)',
-
-        // ألوان ثابتة (غير مرتبطة بالثيم)
         primary: {
           50:  '#eff6ff',
           100: '#dbeafe',
@@ -53,14 +52,6 @@ module.exports = {
       fontSize: {
         'reader': ['1.125rem', { lineHeight: '1.8' }],
       },
-      spacing: {
-        '18': '4.5rem',
-        '88': '22rem',
-        '120': '30rem',
-      },
-      borderRadius: {
-        '4xl': '2rem',
-      },
       boxShadow: {
         'panel': '0 4px 24px rgba(0, 0, 0, 0.08)',
         'panel-dark': '0 4px 24px rgba(0, 0, 0, 0.4)',
@@ -89,5 +80,8 @@ module.exports = {
   plugins: [
     require('@tailwindcss/forms'),
     require('@tailwindcss/typography'),
+    plugin(function ({ addVariant }) {
+      addVariant('rtl', '[dir="rtl"] &');
+    }),
   ],
 };
