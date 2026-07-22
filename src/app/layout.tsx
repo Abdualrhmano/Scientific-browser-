@@ -2,9 +2,6 @@ import type { Metadata } from 'next';
 import { Inter, Crimson_Pro, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 
-// -------------------------------------------
-// إعداد الخطوط
-// -------------------------------------------
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-sans',
@@ -24,32 +21,12 @@ const jetbrainsMono = JetBrains_Mono({
   display: 'swap',
 });
 
-// -------------------------------------------
-// Metadata للتطبيق
-// -------------------------------------------
 export const metadata: Metadata = {
-  title: 'Scientific Browser',
-  description:
-    'A specialized browser for researchers to search, read, and organize academic papers with AI assistance and video support.',
-  keywords: [
-    'scientific',
-    'research',
-    'papers',
-    'academic',
-    'AI',
-    'video',
-    'search engine',
-  ],
-  authors: [{ name: 'Scientific Browser Team' }],
-  themeColor: [
-    { media: '(prefers-color-scheme: dark)', color: '#0f172a' },
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-  ],
+  title: 'Scientific Browser – المتصفح العلمي',
+  description: 'متصفح متخصص للباحثين للبحث عن الأوراق العلمية وقراءتها وتنظيمها.',
+  keywords: ['بحث علمي', 'أوراق بحثية', 'AI', 'فيديو'],
 };
 
-// -------------------------------------------
-// التخطيط الجذري
-// -------------------------------------------
 export default function RootLayout({
   children,
 }: {
@@ -57,10 +34,11 @@ export default function RootLayout({
 }) {
   return (
     <html
-      lang="en"
-      dir="ltr"
+      lang="ar"
+      dir="rtl"
       className="dark"
       style={{ colorScheme: 'dark' }}
+      suppressHydrationWarning
     >
       <body
         className={`${inter.variable} ${crimsonPro.variable} ${jetbrainsMono.variable} font-sans antialiased`}
@@ -69,4 +47,4 @@ export default function RootLayout({
       </body>
     </html>
   );
-    }
+}
