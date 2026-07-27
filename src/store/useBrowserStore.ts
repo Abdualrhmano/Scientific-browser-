@@ -98,7 +98,7 @@ export const useBrowserStore = create<BrowserState>()(
       addTab: (tab) => {
         const id = makeId('tab');
         set((state) => {
-          const tabs = state.tabs.map((t) => ({ ...t, active: false }));
+          const tabs = tab.activate ?? true ? state.tabs.map((t) => ({ ...t, active: false })) : state.tabs.map((t) => ({ ...t }));
           const newTab: Tab = {
             id,
             title: tab.title,
@@ -114,9 +114,10 @@ export const useBrowserStore = create<BrowserState>()(
 
       closeTab: (id) => {
         set((state) => {
-          const tabs = state.tabs.filter((t) => t.id !== id);
-          if (!tabs.some((t) => t.active) && tabs.length) {
-            tabs[tabs.length - 1].active = true;
+          const tabs = state.tabs.filter((t) => t.id !== id).map((t) => ({ ...t }));
+          if (!tabs.some((t) => t.active) && tabs.length > 0) {
+            const lastIndex = tabs.length - 1;
+            tabs[lastIndex] = { ...tabs[lastIndex], active: true };
           }
           return { tabs };
         });

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, type RefObject } from 'react';
 import { useBrowserStore, useBrowserShallow } from '../store/useBrowserStore';
 
 export default function MainContent() {
@@ -79,7 +79,7 @@ function ResearchWorkspace({ tab }: { tab: { id: string; title: string; url?: st
   );
 }
 
-function TimeStampedNotes({ videoRef }: { videoRef: React.RefObject<HTMLVideoElement | null> }) {
+function TimeStampedNotes({ videoRef }: { videoRef: RefObject<HTMLVideoElement | null> }) {
   const saveBookmark = useBrowserStore((s) => s.addBookmark);
   const tabs = useBrowserStore((s) => s.tabs);
   const activeTab = tabs.find((t) => t.active);

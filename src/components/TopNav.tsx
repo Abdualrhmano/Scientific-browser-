@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, type FormEvent } from 'react';
 import { ArrowLeft, ArrowRight, RefreshCw, Search, Bookmark, BookOpen } from 'lucide-react';
 import { useBrowserStore } from '../store/useBrowserStore';
 
@@ -11,10 +11,10 @@ export default function TopNav() {
   const [query, setQuery] = useState('');
 
   const onSubmit = useCallback(
-    (e: React.FormEvent) => {
+    (e: FormEvent) => {
       e.preventDefault();
       if (query.trim().length > 0) {
-        runDeepScan(query.trim());
+        void runDeepScan(query.trim());
       }
       setQuery('');
     },
@@ -65,4 +65,3 @@ export default function TopNav() {
     </header>
   );
 }
-

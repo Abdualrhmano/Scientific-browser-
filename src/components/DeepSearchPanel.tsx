@@ -39,7 +39,7 @@ export default function DeepSearchPanel() {
           e.preventDefault();
           if (localQuery.trim().length > 0) {
             clearDeepScanResults();
-            runDeepScan(localQuery.trim());
+            void runDeepScan(localQuery.trim());
             setLocalQuery('');
           }
         }}
